@@ -1,0 +1,71 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>제품 검사 시스템</title>
+        <style>
+            body {
+                font-family: 'Noto Sans KR', sans-serif;
+                background-color: #f5f5f5;
+                margin: 0;
+                padding: 20px;
+            }
+            .container {
+                display: flex;
+                justify-content: space-around;
+                margin: 20px auto;
+                max-width: 1400px;
+                gap: 20px;
+            }
+            .video-container {
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            .video-container h2 {
+                color: #333;
+                margin-bottom: 15px;
+            }
+            .video-container img {
+                border-radius: 5px;
+                border: 1px solid #eee;
+            }
+            .status {
+                text-align: center;
+                margin: 20px auto;
+                padding: 15px;
+                font-size: 24px;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                max-width: 400px;
+                color: #2c3e50;
+            }
+        </style>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div class="video-container">
+                <h2>실시간 영상</h2>
+                <img src="{{ url_for('video_feed') }}" width="640" height="480">
+            </div>
+            <div class="video-container">
+                <h2>검출 결과</h2>
+                <img src="{{ url_for('detection_feed') }}" width="640" height="480">
+            </div>
+        </div>
+        <div class="status" id="status">상태: 대기 중...</div>
+        <script>
+            function updateStatus() {
+                fetch('/status')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('status').innerText = '상태: ' + data.status;
+                    });
+            }
+            setInterval(updateStatus, 1000);
+        </script>
+    </body>
+    </html>
+    
